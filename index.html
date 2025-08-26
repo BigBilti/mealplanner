@@ -1,0 +1,1844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MealPlan+">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="theme-color" content="#8B7FD6">
+    <title>MealPlan+</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiTWVhbFBsYW4rIiwic2hvcnRfbmFtZSI6Ik1lYWxQbGFuKyIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjRjlGQUZCIiwidGhlbWVfY29sb3IiOiIjOEI3RkQ2Iiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCJ9">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjE4MCIgdmlld0JveD0iMCAwIDE4MCAxODAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxODAiIGhlaWdodD0iMTgwIiByeD0iNDAiIGZpbGw9InVybCgjZ3JhZGllbnQpIi8+Cjx0ZXh0IHg9IjkwIiB5PSIxMTAiIGZvbnQtZmFtaWx5PSJJbnRlciwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSI2MCIgZm9udC13ZWlnaHQ9IjgwMCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPk0rPC90ZXh0Pgo8ZGVmcz4KPGxpbmVhckdyYWRpZW50IGlkPSJncmFkaWVudCIgeDE9IjAiIHkxPSIwIiB4Mj0iMTgwIiB5Mj0iMTgwIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiM4QjdGRDYiLz4KPHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSIjQzhCNkRCIi8+CjwvbGluZWFyR3JhZGllbnQ+CjwvZGVmcz4KPC9zdmc+">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        :root {
+            --primary: #8B7FD6;
+            --primary-light: #B5A9E6;
+            --primary-dark: #6B5FB3;
+            --secondary: #C8B6DB;
+            --accent: #A8C5E0;
+            --success: #9FC5B8;
+            --warning: #E5C5A0;
+            --danger: #EF4444;
+            --danger-rgb: 239, 68, 68;
+            --dark: #0F0F0F;
+            --light: #FFFFFF;
+            --gray-100: #F9FAFB;
+            --gray-200: #F3F4F6;
+            --gray-300: #E5E7EB;
+            --gray-400: #D1D5DB;
+            --gray-500: #9CA3AF;
+            --gray-600: #6B7280;
+            --gray-700: #4B5563;
+            --gray-800: #374151;
+            --gray-900: #1F2937;
+            --gradient-1: linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%);
+            --gummy-gradient: linear-gradient(135deg, rgba(229, 222, 255, 0.3) 0%, rgba(243, 243, 246, 0.3) 100%);
+            --text-primary: #0F0F0F;
+            --text-secondary: #4B5563;
+            --text-tertiary: #9CA3AF;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --glass-bg: rgba(255, 255, 255, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.5);
+            --gummy-shadow: 0 4px 16px rgba(139, 127, 214, 0.06);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.02);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.04);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow-xl: 0 16px 40px rgba(0,0,0,0.08);
+            --transition-fast: 200ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-base: 300ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-slow: 400ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            --transition-spring: 600ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-bounce: 800ms cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        [data-theme="dark"] {
+            --text-primary: #F9FAFB;
+            --text-secondary: #D1D5DB;
+            --text-tertiary: #6B7280;
+            --bg-primary: #0F0F0F;
+            --bg-secondary: #1A1A1A;
+            --glass-bg: rgba(15, 15, 15, 0.8);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --gummy-gradient: linear-gradient(135deg, rgba(139, 127, 214, 0.15) 0%, rgba(200, 182, 219, 0.15) 100%);
+            --gummy-shadow: 0 8px 32px rgba(139, 127, 214, 0.15);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+            transition: all var(--transition-base);
+            -webkit-font-smoothing: antialiased;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            padding-top: env(safe-area-inset-top);
+        }
+
+        /* Grainy texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 1;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.01) 35px, rgba(255,255,255,.01) 70px),
+                repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(0,0,0,.01) 35px, rgba(0,0,0,.01) 70px);
+            mix-blend-mode: multiply;
+        }
+
+        .app-container {
+            max-width: 428px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 120px rgba(124, 58, 237, 0.1);
+            z-index: 2;
+        }
+
+        .header {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            padding: 24px 20px 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .app-title {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -1px;
+            margin-bottom: 16px;
+        }
+
+        .tab-bar {
+            display: flex;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            position: sticky;
+            top: 0;
+            z-index: 90;
+            padding: 8px 12px;
+            gap: 8px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 14px 8px;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-radius: 12px;
+            color: var(--text-secondary);
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-base);
+            overflow: hidden;
+        }
+
+        .tab::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            opacity: 0;
+            transition: opacity var(--transition-base);
+        }
+
+        .tab:hover::before {
+            opacity: 0.1;
+        }
+
+        .tab.active {
+            color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            font-weight: 700;
+        }
+
+        .tab.active::before {
+            opacity: 0.15;
+        }
+
+        .tab:active {
+            transform: scale(0.98);
+        }
+
+        .content {
+            flex: 1;
+            padding: 24px 20px;
+            padding-bottom: 120px;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .section {
+            display: none;
+            animation: sectionFadeIn var(--transition-slow) ease-out;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes sectionFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .grocery-item {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .grocery-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gummy-gradient);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            z-index: 0;
+        }
+
+        .grocery-item:hover::before {
+            opacity: 1;
+        }
+
+        .grocery-item:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 2px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .grocery-item.checked {
+            opacity: 0.5;
+            background: rgba(200, 200, 200, 0.2);
+            transform: scale(0.96);
+            order: 999;
+        }
+
+        .grocery-item.checked::before {
+            opacity: 0 !important;
+        }
+
+        .grocery-item.checked .item-details {
+            text-decoration: line-through;
+            color: var(--text-tertiary);
+        }
+
+        .checkbox-wrapper {
+            position: relative;
+            width: 32px;
+            height: 32px;
+            z-index: 1;
+        }
+
+        .checkbox {
+            appearance: none;
+            width: 32px;
+            height: 32px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 2px solid var(--glass-border);
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-spring);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.05),
+                        0 2px 8px rgba(var(--primary-rgb), 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .checkbox:checked {
+            background: var(--primary);
+            border-color: transparent;
+            box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.4),
+                        inset 0 2px 4px rgba(255, 255, 255, 0.3);
+            animation: checkPulse var(--transition-bounce);
+        }
+
+        @keyframes checkPulse {
+            0% { transform: scale(1); }
+            30% { transform: scale(1.3); }
+            60% { transform: scale(0.9); }
+            100% { transform: scale(1); }
+        }
+
+        .checkbox:checked::after {
+            content: '';
+            position: absolute;
+            width: 7px;
+            height: 12px;
+            border: solid white;
+            border-width: 0 2.5px 2.5px 0;
+            transform: rotate(45deg) translate(-1px, -2px);
+            animation: checkmarkDraw var(--transition-base) ease-out;
+        }
+
+        @keyframes checkmarkDraw {
+            from {
+                opacity: 0;
+                transform: rotate(45deg) translate(-1px, -2px) scale(0);
+            }
+            to {
+                opacity: 1;
+                transform: rotate(45deg) translate(-1px, -2px) scale(1);
+            }
+        }
+
+        .item-details {
+            flex: 1;
+            z-index: 1;
+        }
+
+        .item-name {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+            letter-spacing: -0.3px;
+        }
+
+        .item-meta {
+            font-size: 11px;
+            color: var(--text-secondary);
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .meal-badge {
+            background: var(--gummy-gradient);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 10px;
+            font-weight: 700;
+            color: var(--primary);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: blur(10px);
+            letter-spacing: 0.2px;
+            text-transform: uppercase;
+        }
+
+        .search-container {
+            margin-bottom: 24px;
+            position: relative;
+            width: 100%;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 16px 20px 16px 48px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            font-family: 'Inter', sans-serif;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            text-align: left;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+            font-weight: 400;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .search-container::before {
+            content: '🔍';
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .meals-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+
+        .meal-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 18px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            overflow: hidden;
+            box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.1),
+                        inset 0 -1px 4px rgba(0, 0, 0, 0.02),
+                        var(--shadow-sm);
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .meal-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--gummy-gradient);
+            opacity: 0;
+            transition: opacity var(--transition-base);
+            z-index: 0;
+        }
+
+        .meal-card:hover::before {
+            opacity: 1;
+        }
+
+        .meal-card:active {
+            transform: scale(0.98);
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+
+        .meal-card.selected {
+            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.08), rgba(var(--secondary-rgb), 0.04));
+            border: 2px solid var(--primary);
+            box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.15),
+                        inset 0 1px 4px rgba(255, 255, 255, 0.2);
+        }
+
+        .meal-card.delete-selected {
+            background: rgba(var(--danger-rgb), 0.1);
+            border-color: var(--danger);
+            transform: scale(0.98);
+        }
+
+        .delete-checkbox {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border: 2px solid var(--danger);
+            border-radius: 6px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+        }
+
+        .delete-mode .meal-card .delete-checkbox {
+            display: flex;
+        }
+
+        .delete-checkbox.checked::after {
+            content: '✓';
+            color: var(--danger);
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .meal-header {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .meal-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+            line-height: 1.2;
+            text-align: left;
+            flex: 1;
+        }
+
+        .add-meal-form {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 24px;
+            margin-bottom: 24px;
+            display: none;
+            box-shadow: inset 0 1px 4px rgba(255, 255, 255, 0.1),
+                        inset 0 -1px 4px rgba(0, 0, 0, 0.02),
+                        var(--shadow-md);
+        }
+
+        .add-meal-form.show {
+            display: block;
+            animation: formSlideDown var(--transition-bounce) ease-out;
+        }
+
+        @keyframes formSlideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 10px;
+            display: block;
+            font-weight: 700;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 18px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 16px;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            font-family: inherit;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.1),
+                        inset 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .ingredient-row {
+            display: grid;
+            grid-template-columns: 1.8fr 0.8fr 1fr 36px !important;
+            gap: 8px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+        
+        .ingredient-row input {
+            width: 100% !important;
+        }
+
+        .ingredient-input {
+            padding: 10px 12px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            font-size: 14px;
+            color: var(--text-primary);
+            transition: all var(--transition-base);
+            font-family: inherit;
+        }
+
+        .remove-ingredient-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 10px;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .remove-ingredient-btn:hover {
+            background: #DC2626;
+            transform: scale(1.1);
+        }
+
+        .add-ingredient-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px dashed var(--primary);
+            border-radius: 8px;
+            padding: 12px;
+            width: 100%;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            margin-top: 8px;
+        }
+
+        .add-ingredient-btn:hover {
+            background: rgba(var(--primary-rgb), 0.1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            padding: 16px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+
+        .btn-primary {
+            flex: 1;
+            padding: 16px;
+            background: var(--primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 3px 10px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+        }
+
+        .btn-primary:active {
+            transform: scale(0.98);
+        }
+
+        .show-add-meal-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 18px;
+            font-size: 17px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 24px;
+            width: 100%;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+            letter-spacing: -0.3px;
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .show-add-meal-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(var(--primary-rgb), 0.25);
+        }
+
+        .show-add-meal-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width var(--transition-slow), height var(--transition-slow);
+        }
+
+        .show-add-meal-btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .show-add-meal-btn:active {
+            transform: scale(0.96);
+            box-shadow: 0 4px 16px rgba(124, 58, 237, 0.3);
+        }
+
+        .edit-meals-btn {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .edit-meals-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+        }
+
+        .edit-meals-btn.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .remove-meals-btn {
+            background: transparent;
+            color: var(--danger);
+            border: 2px solid var(--danger);
+            border-radius: 8px;
+            padding: 14px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .remove-meals-btn:hover {
+            background: var(--danger);
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.2);
+        }
+
+        .remove-meals-btn.active {
+            background: var(--danger);
+            color: white;
+        }
+
+        .remove-meals-btn:active {
+            transform: scale(0.98);
+        }
+
+        .delete-actions {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: none;
+            gap: 12px;
+            z-index: 101;
+            animation: slideUp 0.3s ease-out;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            padding: 16px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+        }
+
+        .delete-actions.active {
+            display: flex;
+        }
+
+        .cancel-delete-btn {
+            background: var(--glass-bg);
+            color: var(--text-primary);
+            border: 1px solid var(--glass-border);
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .confirm-delete-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .confirm-delete-btn:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+        }
+
+        .settings-section {
+            padding: 24px 0;
+        }
+
+        .settings-group {
+            margin-bottom: 36px;
+        }
+
+        .settings-label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 18px;
+            font-weight: 700;
+        }
+
+        .theme-toggles {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .theme-btn {
+            flex: 1;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            opacity: 0.8;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .theme-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.2);
+            opacity: 1;
+        }
+
+        .color-themes {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+
+        .color-theme {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            cursor: pointer;
+            position: relative;
+            transition: all var(--transition-spring);
+            border: 3px solid transparent;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08),
+                        inset 0 1px 2px rgba(255, 255, 255, 0.2);
+        }
+
+        .color-theme.active {
+            border-color: var(--bg-primary);
+            box-shadow: 0 0 0 3px var(--primary),
+                        0 8px 24px rgba(124, 58, 237, 0.3);
+            transform: scale(1.1);
+        }
+
+        .color-theme:active {
+            transform: scale(0.95);
+        }
+
+        .theme-1 { background: linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%); }
+        .theme-2 { background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%); }
+        .theme-3 { background: linear-gradient(135deg, #E6F2FF 0%, #F0F4F8 100%); }
+        .theme-4 { background: linear-gradient(135deg, #E8F5F0 0%, #F5F5F5 100%); }
+        .theme-5 { background: linear-gradient(135deg, #FFE5E5 0%, #FFF5F5 100%); }
+        .theme-6 { background: linear-gradient(135deg, #F5E6FF 0%, #FAF5FF 100%); }
+        .theme-7 { background: linear-gradient(135deg, #E5F3FF 0%, #F5FAFF 100%); }
+        .theme-8 { background: linear-gradient(135deg, #FFEDE5 0%, #FFF8F5 100%); }
+
+        .completion-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            opacity: 0;
+            animation: confettiFall 1.5s ease-out forwards;
+        }
+
+        .confetti-piece:nth-child(odd) {
+            background: var(--secondary);
+            width: 8px;
+            height: 8px;
+        }
+
+        .confetti-piece:nth-child(3n) {
+            border-radius: 50%;
+            background: var(--primary);
+        }
+
+        .confetti-piece:nth-child(4n) {
+            width: 6px;
+            height: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+
+        @keyframes confettiFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg) translateX(0);
+                opacity: 1;
+            }
+            10% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(calc(100vh + 100px)) rotate(720deg) translateX(var(--x-movement, 0));
+                opacity: 0;
+            }
+        }
+
+        .floating-progress {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: 8px;
+            padding: 16px 24px;
+            box-shadow: var(--shadow-lg),
+                        inset 0 1px 4px rgba(255, 255, 255, 0.2);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            z-index: 100;
+            max-width: 360px;
+            width: calc(100% - 40px);
+        }
+
+        .progress-text {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -0.2px;
+        }
+
+        .progress-bar {
+            flex: 1;
+            height: 10px;
+            background: rgba(var(--primary-rgb), 0.15);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 5px;
+            transition: width var(--transition-bounce);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(var(--primary-rgb), 0.3);
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--text-secondary);
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 24px;
+            background: var(--gummy-gradient);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--glass-border);
+            border-radius: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 800;
+            color: var(--primary);
+            box-shadow: inset 0 2px 8px rgba(255, 255, 255, 0.3),
+                        0 8px 24px rgba(124, 58, 237, 0.1);
+        }
+
+        .empty-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            letter-spacing: -0.5px;
+        }
+
+        .empty-description {
+            font-size: 16px;
+            opacity: 0.7;
+            line-height: 1.6;
+        }
+
+        #grocery-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 400px) {
+            #grocery-list {
+                grid-template-columns: 1fr;
+            }
+            
+            .meals-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .ingredient-row {
+                grid-template-columns: 1.5fr 0.7fr 0.8fr auto;
+                gap: 4px;
+            }
+            
+            .ingredient-input {
+                padding: 8px;
+                font-size: 13px;
+            }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    
+        /* Grocery sections by Type */
+        .grocery-section { margin-bottom: 16px; }
+        .grocery-section-title {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+            margin: 12px 0 8px;
+            padding-left: 2px;
+        }
+</style>
+</head>
+<body>
+    <div class="app-container">
+        <div class="header">
+            <h1 class="app-title">MealPlan+</h1>
+        </div>
+
+        <div class="tab-bar">
+            <button class="tab active" onclick="switchTab(event, 'grocery')">Grocery</button>
+            <button class="tab" onclick="switchTab(event, 'meals')">Meals</button>
+            <button class="tab" onclick="switchTab(event, 'settings')">Settings</button>
+        </div>
+
+        <div class="content">
+            <div id="grocery" class="section active">
+                <div id="grocery-list"></div>
+            </div>
+
+            <div id="meals" class="section">
+                <div class="search-container">
+                    <input type="text" class="search-input" id="meal-search" placeholder="Search meals..." oninput="searchMeals()">
+                </div>
+                <div class="add-meal-form" id="add-meal-form">
+                    <div class="form-group">
+                        <label class="form-label">Meal Name</label>
+                        <input type="text" class="form-input" id="meal-name" placeholder="e.g. Grilled Salmon Bowl">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Ingredients</label>
+                        <div class="ingredients-header" style="display: grid; grid-template-columns: 1.8fr 0.8fr 1fr auto; gap: 8px; margin-bottom: 8px; padding: 0 4px;">
+                            <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Name</span>
+                            <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Qty</span>
+                            <span style="font-size: 11px; color: var(--text-secondary); font-weight: 600;">Type</span>
+                            <span></span>
+                        </div>
+                        <div id="ingredients-list"></div>
+                        <button type="button" class="add-ingredient-btn" onclick="addIngredientRow()">+ Add Ingredient</button>
+                    </div>
+                    <div class="form-actions">
+                        <button class="btn-secondary" onclick="cancelAddMeal()">Cancel</button>
+                        <button class="btn-primary" onclick="saveMeal()">Save Meal</button>
+                    </div>
+                </div>
+                <div id="meals-list" class="meals-grid"></div>
+                <button class="show-add-meal-btn" onclick="showAddMealForm()">Add New Meal</button>
+                <div style="display: flex; gap: 12px; margin-top: 12px;">
+                    <button class="edit-meals-btn" id="edit-meals-btn" onclick="toggleEditMode()" style="flex: 1;">Edit Meals</button>
+                    <button class="remove-meals-btn" id="remove-meals-btn" onclick="toggleDeleteMode()" style="flex: 1;">Remove Meals</button>
+                </div>
+                <div class="delete-actions" id="delete-actions">
+                    <button class="cancel-delete-btn" onclick="cancelDeleteMode()">Cancel</button>
+                    <button class="confirm-delete-btn" onclick="confirmDelete()">Delete Selected</button>
+                </div>
+            </div>
+
+            <div id="settings" class="section">
+                <div class="settings-section">
+                    <div class="settings-group">
+                        <div class="settings-label">Appearance</div>
+                        <div class="theme-toggles">
+                            <button class="theme-btn active" onclick="setTheme(event, 'light')">Light</button>
+                            <button class="theme-btn" onclick="setTheme(event, 'dark')">Dark</button>
+                        </div>
+                    </div>
+                    <div class="settings-group">
+                        <div class="settings-label">Color Theme</div>
+                        <div class="color-themes">
+                            <div class="color-theme theme-1 active" onclick="setColorTheme(event, 1)"></div>
+                            <div class="color-theme theme-2" onclick="setColorTheme(event, 2)"></div>
+                            <div class="color-theme theme-3" onclick="setColorTheme(event, 3)"></div>
+                            <div class="color-theme theme-4" onclick="setColorTheme(event, 4)"></div>
+                            <div class="color-theme theme-5" onclick="setColorTheme(event, 5)"></div>
+                            <div class="color-theme theme-6" onclick="setColorTheme(event, 6)"></div>
+                            <div class="color-theme theme-7" onclick="setColorTheme(event, 7)"></div>
+                            <div class="color-theme theme-8" onclick="setColorTheme(event, 8)"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="floating-progress">
+            <span class="progress-text">Today's Progress</span>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="completion-animation" id="completion-animation"></div>
+
+    <script type="text/javascript">
+    //<![CDATA[
+        // Color theme definitions
+        const colorThemes = {
+            1: { primary: '#8B7FD6', secondary: '#C8B6DB', gradient: 'linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%)', rgb: '139, 127, 214' },
+            2: { primary: '#8A8A8A', secondary: '#B8B8B8', gradient: 'linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%)', rgb: '138, 138, 138' },
+            3: { primary: '#7FA6D6', secondary: '#A8C5E0', gradient: 'linear-gradient(135deg, #E6F2FF 0%, #F0F4F8 100%)', rgb: '127, 166, 214' },
+            4: { primary: '#7FBD9F', secondary: '#9FC5B8', gradient: 'linear-gradient(135deg, #E8F5F0 0%, #F5F5F5 100%)', rgb: '127, 189, 159' },
+            5: { primary: '#D67F7F', secondary: '#E0A8A8', gradient: 'linear-gradient(135deg, #FFE5E5 0%, #FFF5F5 100%)', rgb: '214, 127, 127' },
+            6: { primary: '#BD7FD6', secondary: '#D6A8E0', gradient: 'linear-gradient(135deg, #F5E6FF 0%, #FAF5FF 100%)', rgb: '189, 127, 214' },
+            7: { primary: '#7FAED6', secondary: '#A8CEE0', gradient: 'linear-gradient(135deg, #E5F3FF 0%, #F5FAFF 100%)', rgb: '127, 174, 214' },
+            8: { primary: '#D6A67F', secondary: '#E0C5A8', gradient: 'linear-gradient(135deg, #FFEDE5 0%, #FFF8F5 100%)', rgb: '214, 166, 127' }
+        };
+
+        // Initialize from localStorage or defaults
+        let meals = JSON.parse(localStorage.getItem('meals')) || [
+            {
+                id: 1,
+                name: "Grilled Chicken Bowl",
+                ingredients: [
+                    {name: "Chicken breast", quantity: "2", type: "Protein"},
+                    {name: "Quinoa", quantity: "1 cup", type: "Other"},
+                    {name: "Broccoli", quantity: "2 cups", type: "Produce"},
+                    {name: "Bell peppers", quantity: "2", type: "Produce"},
+                    {name: "Olive oil", quantity: "2 tbsp", type: "Other"},
+                    {name: "Garlic", quantity: "3 cloves", type: "Produce"}
+                ],
+                selected: false
+            },
+            {
+                id: 2,
+                name: "Salmon Teriyaki",
+                ingredients: [
+                    {name: "Salmon fillet", quantity: "1 lb", type: "Protein"},
+                    {name: "Soy sauce", quantity: "1/4 cup", type: "Other"},
+                    {name: "Honey", quantity: "2 tbsp", type: "Other"},
+                    {name: "Ginger", quantity: "1 tbsp", type: "Produce"},
+                    {name: "Rice", quantity: "2 cups", type: "Other"},
+                    {name: "Green beans", quantity: "1 lb", type: "Produce"}
+                ],
+                selected: false
+            },
+            {
+                id: 3,
+                name: "Vegetable Stir Fry",
+                ingredients: [
+                    {name: "Tofu", quantity: "1 block", type: "Protein"},
+                    {name: "Mixed vegetables", quantity: "4 cups", type: "Produce"},
+                    {name: "Soy sauce", quantity: "3 tbsp", type: "Other"},
+                    {name: "Sesame oil", quantity: "1 tbsp", type: "Other"},
+                    {name: "Rice noodles", quantity: "8 oz", type: "Other"},
+                    {name: "Cashews", quantity: "1/2 cup", type: "Other"}
+                ],
+                selected: false
+            },
+            {
+                id: 4,
+                name: "Turkey Chili",
+                ingredients: [
+                    {name: "Ground turkey", quantity: "1 lb", type: "Protein"},
+                    {name: "Black beans", quantity: "2 cans", type: "Other"},
+                    {name: "Tomatoes", quantity: "3", type: "Produce"},
+                    {name: "Onion", quantity: "1", type: "Produce"},
+                    {name: "Bell peppers", quantity: "2", type: "Produce"},
+                    {name: "Chili powder", quantity: "2 tbsp", type: "Other"}
+                ],
+                selected: false
+            }
+        ];
+
+        let groceryItems = [];
+        let currentColorTheme = localStorage.getItem('colorTheme') || '1';
+        let editMode = false;
+        let editingMealId = null;
+        let deleteMode = false;
+        let selectedForDeletion = [];
+
+        function saveMeals() {
+            localStorage.setItem('meals', JSON.stringify(meals));
+        }
+
+        function generateGroceryList() {
+            const existingChecked = groceryItems.filter(item => item.checked);
+            const ingredientMap = {};
+            
+            meals.filter(meal => meal.selected).forEach(meal => {
+                meal.ingredients.forEach(ingredient => {
+                    const key = `${ingredient.name}_${ingredient.type}`;
+                    if (!ingredientMap[key]) {
+                        ingredientMap[key] = {
+                            name: ingredient.name,
+                            quantity: ingredient.quantity,
+                            type: ingredient.type,
+                            meals: [],
+                            checked: false
+                        };
+                    }
+                    ingredientMap[key].meals.push(meal.name);
+                });
+            });
+
+            // Preserve checked state for existing items
+            Object.values(ingredientMap).forEach(newItem => {
+                const existingItem = existingChecked.find(item => item.name === newItem.name);
+                if (existingItem) {
+                    newItem.checked = true;
+                }
+            });
+
+            groceryItems = Object.values(ingredientMap);
+            renderGroceryList();
+        }
+
+        function renderGroceryList() {
+            const container = document.getElementById('grocery-list');
+            container.innerHTML = '';
+            
+            if (groceryItems.length === 0) {
+                const emptyState = document.createElement('div');
+                emptyState.className = 'empty-state';
+                
+                const icon = document.createElement('div');
+                icon.className = 'empty-icon';
+                icon.textContent = '+';
+                
+                const title = document.createElement('div');
+                title.className = 'empty-title';
+                title.textContent = 'No items yet';
+                
+                const desc = document.createElement('div');
+                desc.className = 'empty-description';
+                desc.textContent = 'Select meals to generate your grocery list';
+                
+                emptyState.appendChild(icon);
+                emptyState.appendChild(title);
+                emptyState.appendChild(desc);
+                container.appendChild(emptyState);
+                
+                updateProgress();
+                return;
+            }
+
+            // Sort items - unchecked first, then checked
+            const sortedItems = [...groceryItems].sort((a, b) => {
+                if (a.checked === b.checked) return 0;
+                return a.checked ? 1 : -1;
+            });
+
+            
+            // Group items by type
+            const groups = {};
+            for (const it of sortedItems) {
+                const key = (it.type && String(it.type).trim()) ? String(it.type).trim() : 'Other';
+                if (!groups[key]) groups[key] = [];
+                groups[key].push(it);
+            }
+            const types = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+            
+            types.forEach(typeKey => {
+                const section = document.createElement('div');
+                section.className = 'grocery-section';
+                
+                const header = document.createElement('div');
+                header.className = 'grocery-section-title';
+                header.textContent = typeKey;
+                section.appendChild(header);
+                
+                groups[typeKey].forEach((item) => {
+                    const originalIndex = groceryItems.findIndex(gi => gi.name === item.name);
+                    
+                    const groceryItem = document.createElement('div');
+                    groceryItem.className = 'grocery-item';
+                    if (item.checked) groceryItem.classList.add('checked');
+                    groceryItem.onclick = function() { toggleItem(originalIndex); };
+                    
+                    const checkboxWrapper = document.createElement('div');
+                    checkboxWrapper.className = 'checkbox-wrapper';
+                    
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'checkbox';
+                    if (item.checked) checkbox.checked = true;
+                    
+                    const itemDetails = document.createElement('div');
+                    itemDetails.className = 'item-details';
+                    
+                    const itemName = document.createElement('div');
+                    itemName.className = 'item-name';
+                    itemName.textContent = item.name;
+                    
+                    const itemMeta = document.createElement('div');
+                    itemMeta.className = 'item-meta';
+                    
+                    const qtyBadge = document.createElement('span');
+                    qtyBadge.className = 'meal-badge';
+                    qtyBadge.textContent = item.quantity;
+                    
+                    itemMeta.appendChild(qtyBadge);
+                    itemDetails.appendChild(itemName);
+                    itemDetails.appendChild(itemMeta);
+                    checkboxWrapper.appendChild(checkbox);
+                    groceryItem.appendChild(checkboxWrapper);
+                    groceryItem.appendChild(itemDetails);
+                    section.appendChild(groceryItem);
+                });
+                
+                container.appendChild(section);
+            });
+    updateProgress();
+        }
+
+        function renderMeals(searchTerm = '') {
+            const container = document.getElementById('meals-list');
+            container.innerHTML = '';
+            
+            let filteredMeals = meals;
+            if (searchTerm) {
+                filteredMeals = meals.filter(meal => 
+                    meal.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    meal.ingredients.some(ing => 
+                        ing.name.toLowerCase().includes(searchTerm.toLowerCase())
+                    )
+                );
+            }
+            
+            if (filteredMeals.length === 0) {
+                const emptyDiv = document.createElement('div');
+                emptyDiv.style.gridColumn = '1 / -1';
+                emptyDiv.style.textAlign = 'center';
+                emptyDiv.style.padding = '40px 20px';
+                emptyDiv.style.color = 'var(--text-secondary)';
+                emptyDiv.textContent = searchTerm ? 'No meals found matching your search' : 'No meals yet. Add your first meal!';
+                container.appendChild(emptyDiv);
+                return;
+            }
+            
+            filteredMeals.forEach((meal) => {
+                const originalIndex = meals.findIndex(m => m.id === meal.id);
+                const isSelectedForDeletion = selectedForDeletion.includes(meal.id);
+                
+                const card = document.createElement('div');
+                card.className = 'meal-card';
+                if (meal.selected) card.classList.add('selected');
+                if (isSelectedForDeletion) card.classList.add('delete-selected');
+                
+                card.onclick = function() {
+                    if (deleteMode) {
+                        toggleDeleteSelection(meal.id);
+                    } else {
+                        toggleMeal(originalIndex);
+                    }
+                };
+                
+                const checkbox = document.createElement('div');
+                checkbox.className = 'delete-checkbox';
+                if (isSelectedForDeletion) checkbox.classList.add('checked');
+                
+                const header = document.createElement('div');
+                header.className = 'meal-header';
+                
+                const title = document.createElement('div');
+                title.className = 'meal-title';
+                title.textContent = meal.name;
+                
+                const ingredients = document.createElement('div');
+                ingredients.style.marginTop = '12px';
+                ingredients.style.fontSize = '13px';
+                ingredients.style.color = 'var(--text-secondary)';
+                ingredients.style.lineHeight = '1.5';
+                ingredients.textContent = meal.ingredients.map(ing => ing.name).join(', ');
+                
+                header.appendChild(title);
+                card.appendChild(checkbox);
+                card.appendChild(header);
+                card.appendChild(ingredients);
+                container.appendChild(card);
+            });
+        }
+
+        function searchMeals() {
+            const searchTerm = document.getElementById('meal-search').value;
+            renderMeals(searchTerm);
+        }
+
+        function toggleItem(index) {
+            groceryItems[index].checked = !groceryItems[index].checked;
+            renderGroceryList();
+            checkMealCompletion();
+        }
+
+        function toggleMeal(index) {
+            if (!deleteMode) {
+                if (editMode) {
+                    // If in edit mode, edit the selected meal
+                    editMeal(meals[index].id);
+                } else {
+                    // Normal toggle selection
+                    meals[index].selected = !meals[index].selected;
+                    saveMeals();
+                    renderMeals();
+                    generateGroceryList();
+                }
+            }
+        }
+
+        function toggleEditMode() {
+            editMode = !editMode;
+            document.getElementById('edit-meals-btn').classList.toggle('active', editMode);
+            if (!editMode) {
+                editingMealId = null;
+                // Hide form if it was open
+                document.getElementById('add-meal-form').classList.remove('show');
+                document.querySelector('.show-add-meal-btn').style.display = 'block';
+            }
+            renderMeals();
+        }
+
+        function editMeal(mealId) {
+            const meal = meals.find(m => m.id === mealId);
+            if (!meal) return;
+            
+            editingMealId = mealId;
+            document.getElementById('add-meal-form').classList.add('show');
+            document.querySelector('.show-add-meal-btn').style.display = 'none';
+            
+            // Populate form with meal data
+            document.getElementById('meal-name').value = meal.name;
+            
+            // Clear and populate ingredients
+            const ingredientsList = document.getElementById('ingredients-list');
+            ingredientsList.innerHTML = '';
+            
+            meal.ingredients.forEach(ingredient => {
+                const row = document.createElement('div');
+                row.className = 'ingredient-row';
+                row.innerHTML = '<input type="text" class="ingredient-input" placeholder="Name" value="' + ingredient.name + '" style="grid-column: 1;">' +
+                    '<input type="text" class="ingredient-input" placeholder="Qty" value="' + ingredient.quantity + '" style="grid-column: 2;">' +
+                    '<input type="text" class="ingredient-input" placeholder="Type" value="' + (ingredient.type || 'Other') + '" style="grid-column: 3;">' +
+                    '<button class="remove-ingredient-btn" onclick="this.parentElement.remove()" style="grid-column: 4;">×</button>';
+                ingredientsList.appendChild(row);
+            });
+            
+            // Turn off edit mode after selecting a meal to edit
+            editMode = false;
+            document.getElementById('edit-meals-btn').classList.remove('active');
+        }
+
+        function toggleDeleteSelection(mealId) {
+            const index = selectedForDeletion.indexOf(mealId);
+            if (index > -1) {
+                selectedForDeletion.splice(index, 1);
+            } else {
+                selectedForDeletion.push(mealId);
+            }
+            renderMeals();
+        }
+
+        function cancelDeleteMode() {
+            deleteMode = false;
+            selectedForDeletion = [];
+            document.body.classList.remove('delete-mode');
+            document.getElementById('remove-meals-btn').classList.remove('active');
+            document.getElementById('delete-actions').classList.remove('active');
+            renderMeals();
+        }
+
+        function confirmDelete() {
+            meals = meals.filter(meal => !selectedForDeletion.includes(meal.id));
+            saveMeals();
+            cancelDeleteMode();
+            generateGroceryList();
+        }
+
+        function addIngredientRow() {
+            const container = document.getElementById('ingredients-list');
+            const row = document.createElement('div');
+            row.className = 'ingredient-row';
+            row.innerHTML = '<input type="text" class="ingredient-input" placeholder="Name" style="grid-column: 1;">' +
+                '<input type="text" class="ingredient-input" placeholder="Qty" style="grid-column: 2;">' +
+                '<input type="text" class="ingredient-input" placeholder="Type" value="Other" style="grid-column: 3;">' +
+                '<button class="remove-ingredient-btn" onclick="this.parentElement.remove()" style="grid-column: 4;">×</button>';
+            container.appendChild(row);
+        }
+
+        function checkMealCompletion() {
+            const total = groceryItems.length;
+            const checked = groceryItems.filter(item => item.checked).length;
+            
+            // Check if all items are checked (100% completion)
+            if (total > 0 && checked === total) {
+                showCompletionAnimation();
+            }
+        }
+
+        function showCompletionAnimation() {
+            const container = document.getElementById('completion-animation');
+            container.innerHTML = '';
+            
+            // Create confetti pieces
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-piece';
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.animationDuration = (1 + Math.random() * 2) + 's';
+                confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                
+                const xMovement = (Math.random() - 0.5) * 200;
+                confetti.style.setProperty('--x-movement', xMovement + 'px');
+                
+                container.appendChild(confetti);
+            }
+            
+            // Clean up after animation
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 3500);
+        }
+
+        function updateProgress() {
+            const total = groceryItems.length;
+            const checked = groceryItems.filter(item => item.checked).length;
+            const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
+            
+            const progressFill = document.getElementById('progress-fill');
+            if (progressFill) {
+                progressFill.style.width = `${percentage}%`;
+            }
+        }
+
+        function switchTab(event, tabName) {
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(tabName).classList.add('active');
+        }
+
+        function setTheme(event, theme) {
+            if (theme === 'dark') {
+                document.body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                document.body.removeAttribute('data-theme');
+                localStorage.setItem('theme', 'light');
+            }
+            
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+
+        function setColorTheme(event, themeNumber) {
+            const theme = colorThemes[themeNumber];
+            document.documentElement.style.setProperty('--primary', theme.primary);
+            document.documentElement.style.setProperty('--secondary', theme.secondary);
+            document.documentElement.style.setProperty('--gradient-1', theme.gradient);
+            document.documentElement.style.setProperty('--primary-rgb', theme.rgb);
+            document.documentElement.style.setProperty('--secondary-rgb', theme.rgb);
+            
+            const gummyGradient = 'linear-gradient(135deg, ' + theme.primary + '20 0%, ' + theme.secondary + '20 100%)';
+            document.documentElement.style.setProperty('--gummy-gradient', gummyGradient);
+            
+            const gummyShadow = '0 4px 16px rgba(' + theme.rgb + ', 0.06)';
+            document.documentElement.style.setProperty('--gummy-shadow', gummyShadow);
+            
+            document.querySelectorAll('.color-theme').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            currentColorTheme = themeNumber.toString();
+            localStorage.setItem('colorTheme', currentColorTheme);
+        }
+
+        function showAddMealForm() {
+            document.getElementById('add-meal-form').classList.add('show');
+            document.querySelector('.show-add-meal-btn').style.display = 'none';
+            // Add one default ingredient row
+            addIngredientRow();
+        }
+
+        function cancelAddMeal() {
+            document.getElementById('add-meal-form').classList.remove('show');
+            document.querySelector('.show-add-meal-btn').style.display = 'block';
+            editingMealId = null;
+            clearForm();
+        }
+
+        function clearForm() {
+            document.getElementById('meal-name').value = '';
+            document.getElementById('ingredients-list').innerHTML = '';
+        }
+
+        function saveMeal() {
+            const name = document.getElementById('meal-name').value.trim();
+            const ingredientRows = document.querySelectorAll('#ingredients-list .ingredient-row');
+            
+            if (!name || ingredientRows.length === 0) {
+                alert('Please enter a meal name and at least one ingredient');
+                return;
+            }
+            
+            const ingredients = [];
+            ingredientRows.forEach(row => {
+                const inputs = row.querySelectorAll('.ingredient-input');
+                const nameInput = inputs[0];
+                const qtyInput = inputs[1];
+                const typeInput = inputs[2];
+                
+                if (nameInput.value.trim()) {
+                    ingredients.push({
+                        name: nameInput.value.trim(),
+                        quantity: qtyInput.value.trim() || '1',
+                        type: typeInput.value.trim() || 'Other'
+                    });
+                }
+            });
+            
+            if (ingredients.length === 0) {
+                alert('Please add at least one ingredient with a name');
+                return;
+            }
+            
+            if (editingMealId) {
+                // Update existing meal
+                const mealIndex = meals.findIndex(m => m.id === editingMealId);
+                if (mealIndex !== -1) {
+                    meals[mealIndex].name = name;
+                    meals[mealIndex].ingredients = ingredients;
+                }
+                editingMealId = null;
+            } else {
+                // Create new meal
+                const newMeal = {
+                    id: Date.now(),
+                    name: name,
+                    ingredients: ingredients,
+                    selected: false
+                };
+                meals.push(newMeal);
+            }
+            
+            saveMeals();
+            renderMeals();
+            generateGroceryList();
+            cancelAddMeal();
+            showCompletionAnimation();
+        }
+
+        // Load saved theme and color
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.setAttribute('data-theme', 'dark');
+            document.querySelectorAll('.theme-btn')[1].classList.add('active');
+            document.querySelectorAll('.theme-btn')[0].classList.remove('active');
+        }
+
+        // Apply saved color theme
+        if (currentColorTheme !== '1') {
+            const theme = colorThemes[currentColorTheme];
+            if (theme) {
+                document.documentElement.style.setProperty('--primary', theme.primary);
+                document.documentElement.style.setProperty('--secondary', theme.secondary);
+                document.documentElement.style.setProperty('--gradient-1', theme.gradient);
+                document.documentElement.style.setProperty('--primary-rgb', theme.rgb);
+                document.documentElement.style.setProperty('--secondary-rgb', theme.rgb);
+                
+                const gummyGradient = 'linear-gradient(135deg, ' + theme.primary + '20 0%, ' + theme.secondary + '20 100%)';
+                document.documentElement.style.setProperty('--gummy-gradient', gummyGradient);
+                
+                const gummyShadow = '0 4px 16px rgba(' + theme.rgb + ', 0.06)';
+                document.documentElement.style.setProperty('--gummy-shadow', gummyShadow);
+                
+                document.querySelectorAll('.color-theme').forEach(btn => {
+                    btn.classList.remove('active');
+                });
+                if (document.querySelectorAll('.color-theme')[parseInt(currentColorTheme) - 1]) {
+                    document.querySelectorAll('.color-theme')[parseInt(currentColorTheme) - 1].classList.add('active');
+                }
+            }
+        }
+
+        // Initialize
+        renderMeals();
+        generateGroceryList();
+    //]]>
+    
+function toggleDeleteMode() {
+  deleteMode = !deleteMode;
+  selectedForDeletion = [];
+  document.body.classList.toggle('delete-mode', deleteMode);
+  const rmBtn = document.getElementById('remove-meals-btn');
+  if (rmBtn) rmBtn.classList.toggle('active', deleteMode);
+  const delActions = document.getElementById('delete-actions');
+  if (delActions) delActions.classList.toggle('active', deleteMode);
+  if (typeof renderMeals === 'function') renderMeals();
+}
+</script>
+</body>
+</html>
