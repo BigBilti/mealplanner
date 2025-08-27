@@ -7,7 +7,7 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="apple-mobile-web-app-title" content="MealPlan+">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="theme-color" content="#8B7FD6">
+    <meta name="theme-color" content="var(--primary)">
     <title>MealPlan+</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     
@@ -25,7 +25,7 @@
         }
 
         :root {
-            --primary: #8B7FD6;
+            --primary: var(--primary);
             --primary-light: #B5A9E6;
             --primary-dark: #6B5FB3;
             --secondary: #C8B6DB;
@@ -80,7 +80,7 @@
 
         body {
             font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg-secondary);
+            background: var(--gradient);
             color: var(--text-primary);
             line-height: 1.6;
             overflow-x: hidden;
@@ -123,7 +123,7 @@
             z-index: 2;
         }
 
-        .header {
+        .header { background: var(--primary);
             background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
@@ -145,7 +145,7 @@
 
         .tab-bar {
             display: flex;
-            background: var(--glass-bg);
+            background: var(--primary);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-bottom: 1px solid var(--glass-border);
@@ -180,7 +180,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
             opacity: 0;
             transition: opacity var(--transition-base);
         }
@@ -477,7 +477,7 @@
         }
 
         .meal-card.selected {
-            background: linear-gradient(135deg, rgba(var(--primary-rgb), 0.08), rgba(var(--secondary-rgb), 0.04));
+            background: var(--primary);
             border: 2px solid var(--primary);
             box-shadow: 0 4px 16px rgba(var(--primary-rgb), 0.15),
                         inset 0 1px 4px rgba(255, 255, 255, 0.2);
@@ -934,14 +934,14 @@
             transform: scale(0.95);
         }
 
-        .theme-1 { background: linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%); }
-        .theme-2 { background: linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%); }
-        .theme-3 { background: linear-gradient(135deg, #E6F2FF 0%, #F0F4F8 100%); }
-        .theme-4 { background: linear-gradient(135deg, #E8F5F0 0%, #F5F5F5 100%); }
-        .theme-5 { background: linear-gradient(135deg, #FFE5E5 0%, #FFF5F5 100%); }
-        .theme-6 { background: linear-gradient(135deg, #F5E6FF 0%, #FAF5FF 100%); }
-        .theme-7 { background: linear-gradient(135deg, #E5F3FF 0%, #F5FAFF 100%); }
-        .theme-8 { background: linear-gradient(135deg, #FFEDE5 0%, #FFF8F5 100%); }
+        .theme-1 { background: var(--primary); }
+        .theme-2 { background: var(--primary); }
+        .theme-3 { background: var(--primary); }
+        .theme-4 { background: var(--primary); }
+        .theme-5 { background: var(--primary); }
+        .theme-6 { background: var(--primary); }
+        .theme-7 { background: var(--primary); }
+        .theme-8 { background: var(--primary); }
 
         .completion-animation {
             position: fixed;
@@ -976,7 +976,7 @@
         .confetti-piece:nth-child(4n) {
             width: 6px;
             height: 12px;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: var(--primary);
         }
 
         @keyframes confettiFall {
@@ -1048,7 +1048,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background: var(--primary);
             animation: shimmer 2s infinite;
         }
 
@@ -1204,18 +1204,6 @@
             <div id="settings" class="section">
                 <div class="settings-section">
                     <div class="settings-group">
-                        <div class="settings-label">Backup & Restore</div>
-                        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
-                            <button class="btn-secondary" onclick="exportData()">Export Data</button>
-                            <label class="btn-primary" style="display:inline-block; padding:8px 12px; cursor:pointer;">
-                                Import Data
-                                <input id="import-file" type="file" accept="application/json" style="display:none" onchange="importData(this.files[0])">
-                            </label>
-                            <div style="font-size:12px; color: var(--text-secondary);">Saves meals and checked items to a JSON file.</div>
-                        </div>
-                    </div>
-
-                    <div class="settings-group">
                         <div class="settings-label">Appearance</div>
                         <div class="theme-toggles">
                             <button class="theme-btn active" onclick="setTheme(event, 'light')">Light</button>
@@ -1253,7 +1241,7 @@
     //<![CDATA[
         // Color theme definitions
         const colorThemes = {
-            1: { primary: '#8B7FD6', secondary: '#C8B6DB', gradient: 'linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%)', rgb: '139, 127, 214' },
+            1: { primary: 'var(--primary)', secondary: '#C8B6DB', gradient: 'linear-gradient(135deg, #E5DEFF 0%, #F3F3F6 100%)', rgb: '139, 127, 214' },
             2: { primary: '#8A8A8A', secondary: '#B8B8B8', gradient: 'linear-gradient(135deg, #F5F5F5 0%, #E8E8E8 100%)', rgb: '138, 138, 138' },
             3: { primary: '#7FA6D6', secondary: '#A8C5E0', gradient: 'linear-gradient(135deg, #E6F2FF 0%, #F0F4F8 100%)', rgb: '127, 166, 214' },
             4: { primary: '#7FBD9F', secondary: '#9FC5B8', gradient: 'linear-gradient(135deg, #E8F5F0 0%, #F5F5F5 100%)', rgb: '127, 189, 159' },
@@ -1393,17 +1381,11 @@
             // Group items by type
             const groups = {};
             for (const it of sortedItems) {
-                const normalize = (t) => {
-                    const map = {produce:'Produce', protein:'Protein', dairy:'Dairy', pantry:'Pantry', snacks:'Snacks', condiments:'Condiments', spices:'Spices', other:'Other'};
-                    const k = String(t || 'Other').trim().toLowerCase();
-                    return map[k] || 'Other';
-                };
-                const key = normalize(it.type);
+                const key = (it.type && String(it.type).trim()) ? String(it.type).trim() : 'Other';
                 if (!groups[key]) groups[key] = [];
                 groups[key].push(it);
             }
-            const typeOrder = ['Produce','Protein','Dairy','Pantry','Snacks','Condiments','Spices','Other'];
-            const types = Object.keys(groups).sort((a,b) => typeOrder.indexOf(a) - typeOrder.indexOf(b));
+            const types = Object.keys(groups).sort((a, b) => a.localeCompare(b));
             
             types.forEach(typeKey => {
                 const section = document.createElement('div');
@@ -1864,73 +1846,6 @@ function toggleDeleteMode() {
   if (delActions) delActions.classList.toggle('active', deleteMode);
   if (typeof renderMeals === 'function') renderMeals();
 }
-
-function exportData() {
-  const payload = {
-    meals: JSON.parse(localStorage.getItem('meals') || '[]'),
-    checkedItems: JSON.parse(localStorage.getItem('checkedItems') || '{}'),
-    schemaVersion: '2'
-  };
-  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'mealplan-backup.json';
-  a.click();
-}
-
-function importData(file) {
-  const r = new FileReader();
-  r.onload = () => {
-    try {
-      const data = JSON.parse(r.result);
-      if (Array.isArray(data.meals)) localStorage.setItem('meals', JSON.stringify(data.meals));
-      if (data.checkedItems && typeof data.checkedItems === 'object') {
-        localStorage.setItem('checkedItems', JSON.stringify(data.checkedItems));
-      }
-      location.reload();
-    } catch {}
-  };
-  r.readAsText(file);
-}
-
-
-// Backup / Restore
-function exportData() {
-  const payload = {
-    meals: JSON.parse(localStorage.getItem('meals') || '[]'),
-    checkedItems: JSON.parse(localStorage.getItem('checkedItems') || '{}'),
-    schemaVersion: '2'
-  };
-  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'mealplan-backup.json';
-  document.body.appendChild(a);
-  a.click();
-  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
-}
-
-function importData(file) {
-  if (!file) return;
-  const r = new FileReader();
-  r.onload = () => {
-    try {
-      const data = JSON.parse(r.result);
-      if (Array.isArray(data.meals)) localStorage.setItem('meals', JSON.stringify(data.meals));
-      if (data.checkedItems && typeof data.checkedItems === 'object') {
-        localStorage.setItem('checkedItems', JSON.stringify(data.checkedItems));
-      }
-      // optional: migrate based on data.schemaVersion
-      generateGroceryList();
-      renderMeals();
-      renderGroceryList();
-    } catch (e) {
-      alert('Import failed: ' + e.message);
-    }
-  };
-  r.readAsText(file);
-}
-
 </script>
 </body>
 </html>
