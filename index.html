@@ -610,9 +610,6 @@
         .ingredient-row input {
             width: 100% !important;
         }
-        .ingredient-row select {
-            width: 100% !important;
-        }
 
         .ingredient-input {
             padding: 10px 12px;
@@ -1149,13 +1146,34 @@
             padding-left: 2px;
         }
 
-        .backup-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
-        .backup-btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border-radius:10px; font-weight:800; min-width:160px; height:44px; }
-        .backup-btn.primary { background: var(--primary); color:#fff; border:none; box-shadow: 0 3px 10px rgba(var(--primary-rgb), 0.2); }
-        .backup-btn.secondary { background:#fff; color: var(--text-primary); border:1px solid var(--glass-border); }
-        .backup-note { font-size:12px; color: var(--text-secondary); margin-top:6px; }
+        /* Backup UI normalization */
+        .settings-group .btn-primary, .settings-group label.btn-primary, .settings-group .btn-secondary {
+            min-width: 180px;
+            height: 44px;
+            border-radius: 12px;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .settings-group .btn-primary, .settings-group label.btn-primary { 
+            background: var(--primary) !important; 
+            color: #fff !important; 
+            border: none !important;
+        }
+        .settings-group .btn-secondary { 
+            background: #fff !important; 
+            color: var(--text-primary) !important; 
+            border: 1px solid var(--glass-border) !important; 
+        }
+        .backup-actions { display:flex; gap:12px; flex-wrap:wrap; align-items:center; }
         .backup-file { display:none; }
-    
+        .backup-note { font-size:12px; color: var(--text-secondary); margin-top:6px; }
+        /* Make selects match inputs width */
+        .ingredient-row input { width: 100%; }
+        .ingredient-row select { width: 100%; }
+
 </style>
 </head>
 <body>
@@ -1235,20 +1253,17 @@
                         </div>
                     </div>
                 
-                    <div class="settings-group">
+                    <div class="settings-group" id="backup-restore">
                         <div class="settings-label">Backup &amp; Restore</div>
                         <div class="backup-actions">
-                          <button class="backup-btn secondary" onclick="exportData()">Export Meals</button>
-                          <label class="backup-btn primary" for="import-file">Import Meals</label>
-                          <input id="import-file" class="backup-file" type="file" accept="application/json" onchange="importData(this.files[0])">
+                            <button class="btn-secondary" onclick="exportData()">Export Meals</button>
+                            <label class="btn-primary" for="import-file">Import Meals</label>
+                            <input id="import-file" class="backup-file" type="file" accept="application/json" onchange="importData(this.files[0])">
                         </div>
                         <div class="backup-note">Saves meals and checked items to a JSON file.</div>
                     </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="floating-progress">
+                </div></div></div>
+                <div class="floating-progress">
 
             <span class="progress-text">Today's Progress</span>
             <div class="progress-bar">
@@ -1407,8 +1422,7 @@
                 if (!groups[key]) groups[key] = [];
                 groups[key].push(it);
             }
-            const typeOrder = ['Produce','Protein','Dairy','Pantry','Snacks','Condiments','Spices','Other'];
-            const types = typeOrder.filter(t => groups[t]).concat(Object.keys(groups).filter(t => !typeOrder.includes(t)).sort((a,b)=>a.localeCompare(b)));
+            const types = Object.keys(groups).sort((a, b) => a.localeCompare(b));
             
             types.forEach(typeKey => {
                 const section = document.createElement('div');
@@ -1646,7 +1660,7 @@ renderMeals();
             row.className = 'ingredient-row';
             row.innerHTML = '<input type="text" class="ingredient-input" placeholder="Name" style="grid-column: 1;">' +
                 '<input type="text" class="ingredient-input" placeholder="Qty" style="grid-column: 2;">' +
-                '<input type="text" class="ingredient-input" placeholder="Type" value="Other" style="grid-column: 3;">' +
+                '<select class=\"ingredient-input ingredient-type\" style=\"grid-column: 3;\"><option>Protein</option><option>Produce</option><option>Dairy</option><option>Pantry</option><option>Snacks</option><option>Spices</option><option>Condiments</option><option selected>Other</option></select>' +
                 '<button class="remove-ingredient-btn" onclick="this.parentElement.remove()" style="grid-column: 4;">×</button>';
             container.appendChild(row);
         }
@@ -1886,6 +1900,24 @@ function exportData() {
   setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
 }
 
+function triggerConfetti() {
+  const container = document.getElementById('completion-animation');
+  if (!container) return;
+  container.innerHTML = '';
+  const pieces = 80;
+  for (let i = 0; i < pieces; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = Math.random() * 100 + 'vw';
+    el.style.top = '-10px';
+    el.style.opacity = '1';
+    el.style.transform = `rotate(${Math.random()*180}deg)`;
+    el.style.animationDelay = (Math.random()*0.3) + 's';
+    container.appendChild(el);
+  }
+  setTimeout(() => { container.innerHTML = ''; }, 2000);
+}
+
 function importData(file) {
   if (!file) return;
   const r = new FileReader();
@@ -1899,7 +1931,7 @@ function importData(file) {
       renderMeals();
       generateGroceryList();
       saveMeals();
-      showCompletionAnimation();
+      triggerConfetti();
     } catch (e) {
       alert('Import failed: ' + e.message);
     }
