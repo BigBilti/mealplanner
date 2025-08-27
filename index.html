@@ -1204,6 +1204,18 @@
             <div id="settings" class="section">
                 <div class="settings-section">
                     <div class="settings-group">
+                        <div class="settings-label">Backup & Restore</div>
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center;">
+                            <button class="btn-secondary" onclick="exportData()">Export Data</button>
+                            <label class="btn-primary" style="display:inline-block; padding:8px 12px; cursor:pointer;">
+                                Import Data
+                                <input id="import-file" type="file" accept="application/json" style="display:none" onchange="importData(this.files[0])">
+                            </label>
+                            <div style="font-size:12px; color: var(--text-secondary);">Saves meals and checked items to a JSON file.</div>
+                        </div>
+                    </div>
+
+                    <div class="settings-group">
                         <div class="settings-label">Appearance</div>
                         <div class="theme-toggles">
                             <button class="theme-btn active" onclick="setTheme(event, 'light')">Light</button>
@@ -1313,37 +1325,29 @@
         let editingMealId = null;
         let deleteMode = false;
         let selectedForDeletion = [];
+        function getCheckedMap() {
+            try { return JSON.parse(localStorage.getItem('checkedItems')) || {}; } catch { return {}; }
+        }
+        function setCheckedMap(map) { localStorage.setItem('checkedItems', JSON.stringify(map)); }
+        function itemKey(name, type) { return (name||'').trim() + '::' + ((type||'Other').trim()); }
+
 
         function saveMeals() {
             localStorage.setItem('meals', JSON.stringify(meals));
         }
 
         function generateGroceryList() {
-            const existingChecked = groceryItems.filter(item => item.checked);
+            const checkedMap = getCheckedMap();
             const ingredientMap = {};
             
             meals.filter(meal => meal.selected).forEach(meal => {
                 meal.ingredients.forEach(ingredient => {
                     const key = `${ingredient.name}_${ingredient.type}`;
                     if (!ingredientMap[key]) {
-                        ingredientMap[key] = {
-                            name: ingredient.name,
-                            quantity: ingredient.quantity,
-                            type: ingredient.type,
-                            meals: [],
-                            checked: false
-                        };
+                        ingredientMap[key] = { name: ingredient.name, quantity: ingredient.quantity, type: ingredient.type, meals: [], checked: !!checkedMap[key] };
                     }
                     ingredientMap[key].meals.push(meal.name);
                 });
-            });
-
-            // Preserve checked state for existing items
-            Object.values(ingredientMap).forEach(newItem => {
-                const existingItem = existingChecked.find(item => item.name === newItem.name);
-                if (existingItem) {
-                    newItem.checked = true;
-                }
             });
 
             groceryItems = Object.values(ingredientMap);
@@ -1389,11 +1393,17 @@
             // Group items by type
             const groups = {};
             for (const it of sortedItems) {
-                const key = (it.type && String(it.type).trim()) ? String(it.type).trim() : 'Other';
+                const normalize = (t) => {
+                    const map = {produce:'Produce', protein:'Protein', dairy:'Dairy', pantry:'Pantry', snacks:'Snacks', condiments:'Condiments', spices:'Spices', other:'Other'};
+                    const k = String(t || 'Other').trim().toLowerCase();
+                    return map[k] || 'Other';
+                };
+                const key = normalize(it.type);
                 if (!groups[key]) groups[key] = [];
                 groups[key].push(it);
             }
-            const types = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+            const typeOrder = ['Produce','Protein','Dairy','Pantry','Snacks','Condiments','Spices','Other'];
+            const types = Object.keys(groups).sort((a,b) => typeOrder.indexOf(a) - typeOrder.indexOf(b));
             
             types.forEach(typeKey => {
                 const section = document.createElement('div');
@@ -1404,7 +1414,7 @@
                 header.textContent = typeKey;
                 section.appendChild(header);
                 
-                groups[typeKey].forEach((item) => {
+                groups[typeKey].sort((a,b)=>a.name.localeCompare(b.name)).forEach((item)=>{
                     const originalIndex = groceryItems.findIndex(gi => gi.name === item.name);
                     
                     const groceryItem = document.createElement('div');
@@ -1430,12 +1440,8 @@
                     const itemMeta = document.createElement('div');
                     itemMeta.className = 'item-meta';
                     
-                    const qtyBadge = document.createElement('span');
-                    qtyBadge.className = 'meal-badge';
-                    qtyBadge.textContent = item.quantity;
-                    
-                    itemMeta.appendChild(qtyBadge);
-                    itemDetails.appendChild(itemName);
+                    if (item.quantity) { const qtyBadge = document.createElement('span'); qtyBadge.className = 'meal-badge'; qtyBadge.textContent = item.quantity; itemMeta.appendChild(qtyBadge); }
+itemDetails.appendChild(itemName);
                     itemDetails.appendChild(itemMeta);
                     checkboxWrapper.appendChild(checkbox);
                     groceryItem.appendChild(checkboxWrapper);
@@ -1521,11 +1527,17 @@
             renderMeals(searchTerm);
         }
 
+        
         function toggleItem(index) {
             groceryItems[index].checked = !groceryItems[index].checked;
+            const map = getCheckedMap();
+            const key = itemKey(groceryItems[index].name, groceryItems[index].type);
+            if (groceryItems[index].checked) { map[key] = true; } else { delete map[key]; }
+            setCheckedMap(map);
             renderGroceryList();
             checkMealCompletion();
         }
+        
 
         function toggleMeal(index) {
             if (!deleteMode) {
@@ -1536,7 +1548,8 @@
                     // Normal toggle selection
                     meals[index].selected = !meals[index].selected;
                     saveMeals();
-                    renderMeals();
+                    if (!meals[index].selected) { const map = getCheckedMap(); (meals[index].ingredients||[]).forEach(ing => { delete map[itemKey(ing.name, ing.type)]; }); setCheckedMap(map); }
+renderMeals();
                     generateGroceryList();
                 }
             }
@@ -1576,6 +1589,8 @@
                     '<input type="text" class="ingredient-input" placeholder="Qty" value="' + ingredient.quantity + '" style="grid-column: 2;">' +
                     '<input type="text" class="ingredient-input" placeholder="Type" value="' + (ingredient.type || 'Other') + '" style="grid-column: 3;">' +
                     '<button class="remove-ingredient-btn" onclick="this.parentElement.remove()" style="grid-column: 4;">×</button>';
+                const sel = row.querySelector('select.ingredient-type');
+                if (sel) sel.value = (ingredient.type && ['Protein','Produce','Dairy','Pantry','Snacks','Spices','Condiments','Other'].includes(ingredient.type)) ? ingredient.type : 'Other';
                 ingredientsList.appendChild(row);
             });
             
@@ -1603,12 +1618,22 @@
             renderMeals();
         }
 
+        
         function confirmDelete() {
-            meals = meals.filter(meal => !selectedForDeletion.includes(meal.id));
+            const toDelete = new Set(selectedForDeletion);
+            const map = getCheckedMap();
+            meals.forEach(meal => {
+                if (toDelete.has(meal.id)) {
+                    (meal.ingredients || []).forEach(ing => { delete map[itemKey(ing.name, ing.type)]; });
+                }
+            });
+            meals = meals.filter(meal => !toDelete.has(meal.id));
+            setCheckedMap(map);
             saveMeals();
             cancelDeleteMode();
             generateGroceryList();
         }
+    
 
         function addIngredientRow() {
             const container = document.getElementById('ingredients-list');
@@ -1749,13 +1774,13 @@
                 const inputs = row.querySelectorAll('.ingredient-input');
                 const nameInput = inputs[0];
                 const qtyInput = inputs[1];
-                const typeInput = inputs[2];
+                const typeInput = row.querySelector('select.ingredient-type') || inputs[2];
                 
                 if (nameInput.value.trim()) {
                     ingredients.push({
                         name: nameInput.value.trim(),
-                        quantity: qtyInput.value.trim() || '1',
-                        type: typeInput.value.trim() || 'Other'
+                        quantity: qtyInput.value.trim() ,
+                        type: (typeInput && typeInput.value ? typeInput.value.trim() : 'Other')
                     });
                 }
             });
@@ -1839,6 +1864,73 @@ function toggleDeleteMode() {
   if (delActions) delActions.classList.toggle('active', deleteMode);
   if (typeof renderMeals === 'function') renderMeals();
 }
+
+function exportData() {
+  const payload = {
+    meals: JSON.parse(localStorage.getItem('meals') || '[]'),
+    checkedItems: JSON.parse(localStorage.getItem('checkedItems') || '{}'),
+    schemaVersion: '2'
+  };
+  const blob = new Blob([JSON.stringify(payload,null,2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mealplan-backup.json';
+  a.click();
+}
+
+function importData(file) {
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (Array.isArray(data.meals)) localStorage.setItem('meals', JSON.stringify(data.meals));
+      if (data.checkedItems && typeof data.checkedItems === 'object') {
+        localStorage.setItem('checkedItems', JSON.stringify(data.checkedItems));
+      }
+      location.reload();
+    } catch {}
+  };
+  r.readAsText(file);
+}
+
+
+// Backup / Restore
+function exportData() {
+  const payload = {
+    meals: JSON.parse(localStorage.getItem('meals') || '[]'),
+    checkedItems: JSON.parse(localStorage.getItem('checkedItems') || '{}'),
+    schemaVersion: '2'
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mealplan-backup.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+function importData(file) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (Array.isArray(data.meals)) localStorage.setItem('meals', JSON.stringify(data.meals));
+      if (data.checkedItems && typeof data.checkedItems === 'object') {
+        localStorage.setItem('checkedItems', JSON.stringify(data.checkedItems));
+      }
+      // optional: migrate based on data.schemaVersion
+      generateGroceryList();
+      renderMeals();
+      renderGroceryList();
+    } catch (e) {
+      alert('Import failed: ' + e.message);
+    }
+  };
+  r.readAsText(file);
+}
+
 </script>
 </body>
 </html>
