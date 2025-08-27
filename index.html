@@ -610,6 +610,9 @@
         .ingredient-row input {
             width: 100% !important;
         }
+        .ingredient-row select {
+            width: 100% !important;
+        }
 
         .ingredient-input {
             padding: 10px 12px;
@@ -1145,6 +1148,14 @@
             margin: 12px 0 8px;
             padding-left: 2px;
         }
+
+        .backup-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+        .backup-btn { display:inline-flex; align-items:center; justify-content:center; padding:12px 16px; border-radius:10px; font-weight:800; min-width:160px; height:44px; }
+        .backup-btn.primary { background: var(--primary); color:#fff; border:none; box-shadow: 0 3px 10px rgba(var(--primary-rgb), 0.2); }
+        .backup-btn.secondary { background:#fff; color: var(--text-primary); border:1px solid var(--glass-border); }
+        .backup-note { font-size:12px; color: var(--text-secondary); margin-top:6px; }
+        .backup-file { display:none; }
+    
 </style>
 </head>
 <body>
@@ -1223,11 +1234,22 @@
                             <div class="color-theme theme-8" onclick="setColorTheme(event, 8)"></div>
                         </div>
                     </div>
+                
+                    <div class="settings-group">
+                        <div class="settings-label">Backup &amp; Restore</div>
+                        <div class="backup-actions">
+                          <button class="backup-btn secondary" onclick="exportData()">Export Meals</button>
+                          <label class="backup-btn primary" for="import-file">Import Meals</label>
+                          <input id="import-file" class="backup-file" type="file" accept="application/json" onchange="importData(this.files[0])">
+                        </div>
+                        <div class="backup-note">Saves meals and checked items to a JSON file.</div>
+                    </div>
                 </div>
             </div>
         </div>
 
         <div class="floating-progress">
+
             <span class="progress-text">Today's Progress</span>
             <div class="progress-bar">
                 <div class="progress-fill" id="progress-fill" style="width: 0%"></div>
@@ -1330,7 +1352,7 @@
             
             meals.filter(meal => meal.selected).forEach(meal => {
                 meal.ingredients.forEach(ingredient => {
-                    const key = `${ingredient.name}_${ingredient.type}`;
+                    const key = itemKey(ingredient.name, ingredient.type);
                     if (!ingredientMap[key]) {
                         ingredientMap[key] = { name: ingredient.name, quantity: ingredient.quantity, type: ingredient.type, meals: [], checked: !!checkedMap[key] };
                     }
@@ -1385,7 +1407,8 @@
                 if (!groups[key]) groups[key] = [];
                 groups[key].push(it);
             }
-            const types = Object.keys(groups).sort((a, b) => a.localeCompare(b));
+            const typeOrder = ['Produce','Protein','Dairy','Pantry','Snacks','Condiments','Spices','Other'];
+            const types = typeOrder.filter(t => groups[t]).concat(Object.keys(groups).filter(t => !typeOrder.includes(t)).sort((a,b)=>a.localeCompare(b)));
             
             types.forEach(typeKey => {
                 const section = document.createElement('div');
@@ -1397,7 +1420,7 @@
                 section.appendChild(header);
                 
                 groups[typeKey].sort((a,b)=>a.name.localeCompare(b.name)).forEach((item)=>{
-                    const originalIndex = groceryItems.findIndex(gi => gi.name === item.name);
+                    const originalIndex = groceryItems.findIndex(gi => gi.name === item.name && gi.type === item.type);
                     
                     const groceryItem = document.createElement('div');
                     groceryItem.className = 'grocery-item';
@@ -1846,6 +1869,44 @@ function toggleDeleteMode() {
   if (delActions) delActions.classList.toggle('active', deleteMode);
   if (typeof renderMeals === 'function') renderMeals();
 }
+
+// Backup / Restore
+function exportData() {
+  const payload = {
+    meals: JSON.parse(localStorage.getItem('meals') || '[]'),
+    checkedItems: JSON.parse(localStorage.getItem('checkedItems') || '{}'),
+    schemaVersion: '2'
+  };
+  const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'mealplan-backup.json';
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+}
+
+function importData(file) {
+  if (!file) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try {
+      const data = JSON.parse(r.result);
+      if (!data || !Array.isArray(data.meals)) throw new Error('Invalid file format');
+      localStorage.setItem('meals', JSON.stringify(data.meals));
+      localStorage.setItem('checkedItems', JSON.stringify(data.checkedItems || {}));
+      if (typeof meals !== 'undefined') { meals = data.meals; }
+      renderMeals();
+      generateGroceryList();
+      saveMeals();
+      showCompletionAnimation();
+    } catch (e) {
+      alert('Import failed: ' + e.message);
+    }
+  };
+  r.readAsText(file);
+}
+
 </script>
 </body>
 </html>
